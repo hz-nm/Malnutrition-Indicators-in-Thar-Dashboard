@@ -113,3 +113,4 @@ widgetsnbextension==3.5.2
 wincertstore==0.2
 zipp==3.7.0
 boto3==1.21.3
+botocore==1.24.3
