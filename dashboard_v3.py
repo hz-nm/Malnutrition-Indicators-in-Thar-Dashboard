@@ -122,7 +122,7 @@ fig.update_layout(width=1200,
                 #   paper_bgcolor="#fff",
                 #   plot_bgcolor="#fff"
                   )
-fig.update_traces(line_color="#ff0000", line_width=5)
+fig.update_traces(line_color="#ff0000", line_width=3)
 
 st.plotly_chart(fig, use_container_width=True)
 # st.line_chart(temp_data, width=1200, height=400, use_container_width=True)
@@ -130,28 +130,28 @@ st.plotly_chart(fig, use_container_width=True)
 st.header('Humidity')
 st.metric('Last Updated Humidity', humi_data.iloc[-1], delta="{:.2f}".format(humi_data.iloc[1] - humi_data.iloc[2]))
 # st.line_chart(humi_data, width=1200, height=400, use_container_width=True)
-fig = px.line(humi_data, y="Humidity")
+fig = px.line(humi_data, y="Humidity", markers=True)
 fig.update_xaxes(rangeslider_visible = True)
 fig.update_layout(width=1200,
                   height=600
                 #   paper_bgcolor="#fff",
                 #   plot_bgcolor="#fff"
                   )
-fig.update_traces(line_color="#00ff00", line_width=5)
+fig.update_traces(line_color="#00ff00", line_width=3)
 
 st.plotly_chart(fig, use_container_width=True)
 
 st.header('Pressure')
 st.metric('Last Updated Pressure', presse_data.iloc[-1], delta="{:.2f}".format(presse_data.iloc[1] - presse_data.iloc[2]))
 # st.line_chart(presse_data, width=1200, height=400, use_container_width=True)
-fig = px.line(presse_data, y="Pressure")
+fig = px.line(presse_data, y="Pressure", markers=True)
 fig.update_xaxes(rangeslider_visible = True)
 fig.update_layout(width=1200,
                   height=600
                 #   paper_bgcolor="#fff",
                 #   plot_bgcolor="#fff"
                   )
-fig.update_traces(line_color="#0000ff", line_width=5)
+fig.update_traces(line_color="#0000ff", line_width=3)
 
 st.plotly_chart(fig, use_container_width=True)
 
@@ -159,28 +159,28 @@ st.plotly_chart(fig, use_container_width=True)
 st.header('Turbidity')
 st.metric('Last Updated Turbidity', turb_data.iloc[-1], delta="{:.2f}".format(turb_data.iloc[1] - turb_data.iloc[2]))
 # st.line_chart(turb_data, width=1200, height=400, use_container_width=True)
-fig = px.line(turb_data, y="Turbidity")
+fig = px.line(turb_data, y="Turbidity", markers=True)
 fig.update_xaxes(rangeslider_visible = True)
 fig.update_layout(width=1200,
                   height=600
                 #   paper_bgcolor="#fff",
                 #   plot_bgcolor="#fff"
                   )
-fig.update_traces(line_color="#ff0000", line_width=5)
+fig.update_traces(line_color="#ff0000", line_width=3)
 
 st.plotly_chart(fig, use_container_width=True)
 
 st.header('PH')
 st.metric('Last Updated PH', ph_data.iloc[-1], delta="{:.2f}".format(ph_data.iloc[1] - ph_data.iloc[2]))
 # st.line_chart(ph_data, width=1200, height=400, use_container_width=True)
-fig = px.line(ph_data, y="PH")
+fig = px.line(ph_data, y="PH", markers=True)
 fig.update_xaxes(rangeslider_visible = True)
 fig.update_layout(width=1200,
                   height=600
                 #   paper_bgcolor="#fff",
                 #   plot_bgcolor="#fff"
                   )
-fig.update_traces(line_color="#00ff00", line_width=5)
+fig.update_traces(line_color="#00ff00", line_width=3)
 
 st.plotly_chart(fig, use_container_width=True)
 
