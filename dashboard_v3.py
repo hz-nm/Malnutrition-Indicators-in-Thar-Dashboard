@@ -30,12 +30,7 @@ dynamo_db = boto3.resource('dynamodb', region_name = region,
                             aws_access_key_id = aws_access_key,
                             aws_secret_access_key = aws_secret_key)
 
-dynamodb = boto3.client('dynamodb',
-                        region_name = region,
-                        aws_access_key_id = aws_access_key,
-                        aws_secret_access_key = aws_secret_key)
-
-table = dynamodb.Table('NodeData')
+table = dynamo_db.Table('NodeData')
 
 # Fetch the service account key JSON file contents
 # We use the following resource
