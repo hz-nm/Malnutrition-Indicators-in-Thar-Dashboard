@@ -1,9 +1,8 @@
 # from ctypes.wintypes import PCHAR
 import json
 from operator import index
-import firebase_admin
-from firebase_admin import db
-from firebase_admin import credentials
+import resource
+import boto3
 import time
 from encodings import normalize_encoding
 import streamlit as st
@@ -11,9 +10,9 @@ import numpy as np
 import pandas as pd
 
 import plotly.express as px
+from boto3.dynamodb.conditions import Key, Attr
 
 # from dashboard.dashboard_v1 import DATA_URL
-
 temperature = []
 pressure = []
 humidity = []
@@ -22,43 +21,53 @@ turbidity = []
 dates = []
 
 # do this every time it is run on a new PC
-# default_app = firebase_admin.initialize_app()
+aws_access_key = "AKIAZZZNWBLN3O3MH24V"
+aws_secret_key = "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"
+
+region = "us-east-1"
+
+dynamo_db = boto3.resource('dynamodb', region_name = region,
+                            aws_access_key_id = aws_access_key,
+                            aws_secret_access_key = aws_secret_key)
+
+dynamodb = boto3.client('dynamodb',
+                        region_name = region,
+                        aws_access_key_id = aws_access_key,
+                        aws_secret_access_key = aws_secret_key)
+
+table = dynamodb.Table('NodeData')
 
 # Fetch the service account key JSON file contents
-try:
-    app = firebase_admin.get_app()
-except ValueError as e:
-    cred = credentials.Certificate('secrets.json')
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://esp32-test-project-a01-default-rtdb.firebaseio.com/'
-    })
+# We use the following resource
+# https://boto3.amazonaws.com/v1/documentation/api/latest/guide/dynamodb.html#querying-and-scanning
+# get all the data of Node 1
+response = table.query(
+    KeyConditionExpression=Key('id').eq('1')
+)
 
-ref = db.reference('/Nodes')
-data = ref.get()
+# Now the response will be a list within which we will have a json.
+# For example,
+# [{u'username': u'johndoe',
+#   u'first_name': u'John',
+#   u'last_name': u'Doe',
+#   u'account_type': u'standard_user',
+#   u'age': Decimal('25'),
+#   u'address': {u'city': u'Los Angeles',
+#                u'state': u'CA',
+#                u'zipcode': Decimal('90001'),
+#                u'road': u'1 Jefferson Street'}}]
 
-data_json = json.dumps(data)
+all_data = response['Items']
+data = []
 
-for date in data["Node1"]:
-    try:
-        turb = data["Node1"][str(date)]["Turbidity"]
-    except KeyError:
-        turb = 0.0
-    try:
-        temp = data["Node1"][str(date)]["Temperature"]
-    except KeyError:
-        temp = 0.0
-    try:
-        humi = data["Node1"][str(date)]["Humidity"]
-    except KeyError:
-        humi = 0.0
-    try:
-        pressu = data["Node1"][str(date)]["Pressure"]
-    except KeyError:
-        pressu = 0.0
-    try:
-        ph_v = data["Node1"][str(date)]["PH"]
-    except KeyError:
-        ph_v = 0.0
+for i in range(len(all_data)):
+    # get the temperature, pressure, humidity, pH and Turbidity
+    turb = all_data[i]['Turbidity']
+    temp = all_data[i]['Temperature']
+    humi = all_data[i]['Humidity']
+    pressu = all_data[i]['Pressure']
+    ph_v = all_data[i]['PH']
+    date = all_data[i]['TakenAt']
 
     temperature.append(float(temp))
     humidity.append(float(humi))
@@ -111,7 +120,7 @@ st.map(map_data)
 
 st.header('Temperature')
 st.metric('Last Updated Temperature', temp_data.iloc[-1], delta="{:.2f}".format(temp_data.iloc[1] - temp_data.iloc[2]))
-fig = px.line(temp_data, y="Temperature")
+fig = px.line(temp_data, y="Temperature", markers=True)
 fig.update_xaxes(rangeslider_visible = True)
 fig.update_layout(width=1200,
                   height=600
