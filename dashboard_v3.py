@@ -21,8 +21,8 @@ turbidity = []
 dates = []
 
 # do this every time it is run on a new PC
-aws_access_key = "AKIAZZZNWBLN3O3MH24V"
-aws_secret_key = "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"
+aws_access_key = ""
+aws_secret_key = ""
 
 region = "us-east-1"
 
